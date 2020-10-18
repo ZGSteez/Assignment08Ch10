@@ -1,0 +1,100 @@
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.LayoutManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JPanel;
+import java.lang.reflect.Array;
+import java.util.*;
+
+public class SavingsAccount implements ActionListener {
+    private JLabel firstLabel, secondLabel, thirdLabel;
+    private JTextField firstLabelInput, secondLabelInput, thirdLabelInput;
+    private JTextArea calculateOutput;
+    private JButton calculateButton;
+    private String savingsAccountDescription = "";
+    private JFrame f;
+    private final int HEIGHT = 750, WIDTH = 450;
+
+    SavingsAccount() {
+        f = new JFrame();
+        createGUI(f);
+        f.setLayout(null);
+        f.setVisible(true);
+    }
+
+    public void createGUI(JFrame f) {
+        firstLabel = new JLabel("Initial Amount");
+        firstLabel.setBounds(50, 50, 200, 20);
+        firstLabelInput = new JTextField();
+        firstLabelInput.setBounds(300, 50, 150, 20);
+
+        secondLabel = new JLabel("Annual Percentage Yield (%)");
+        secondLabel.setBounds(50, 100, 200, 20);
+        secondLabelInput = new JTextField();
+        secondLabelInput.setBounds(300, 100, 150, 20);
+
+        thirdLabel = new JLabel("Years in savings account");
+        thirdLabel.setBounds(50, 150, 200, 20);
+        thirdLabelInput = new JTextField();
+        thirdLabelInput.setBounds(300, 150, 150, 20);
+
+        calculateOutput = new JTextArea();
+        calculateOutput.setBounds(50, 250, 350, 600);
+
+        calculateButton = new JButton("Calculate");
+        calculateButton.setBounds(50, 200, 100, 50);
+        calculateButton.addActionListener(this);
+
+        f.add(firstLabel);
+        f.add(firstLabelInput);
+
+        f.add(secondLabel);
+        f.add(secondLabelInput);
+
+        f.add(thirdLabel);
+        f.add(thirdLabelInput);
+
+        f.add(calculateOutput);
+        f.add(calculateButton);
+        f.setSize(WIDTH, HEIGHT);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String firstInput = firstLabelInput.getText();
+        String secondInput = secondLabelInput.getText();
+        String thirdInput = thirdLabelInput.getText();
+        double initialAmount = Double.parseDouble(firstInput);
+        double APY = Double.parseDouble(secondInput);
+        APY /= 100;
+        double years = Double.parseDouble(thirdInput);
+        double balance = 0;
+
+        if (e.getSource() == calculateButton && (years <= 25 && years > 0)) {
+            savingsAccountDescription = "";
+            savingsAccountDescription += ("     Balance after each Year:" + "\n");
+
+            for (int i = 0; i <= years; i++) {
+                if (i == 0) {
+                    balance = initialAmount;
+                } else {
+                    balance = balance * (1 + APY);
+                }
+                savingsAccountDescription += ("     Year " + i + ": " + String.format("%,.2f", balance) + "\n");
+            }
+            calculateOutput.setText(savingsAccountDescription);
+        } else {
+            String errorMessage = "Try a smaller year as input";
+            calculateOutput.setText(errorMessage);
+        }
+    }
+}
+
+//    Write an application with three buttons labeled “Red”, “Green”, and “Blue” that
+//        changes the background color of a panel in the center of the frame to red, green,
+//        or blue.
